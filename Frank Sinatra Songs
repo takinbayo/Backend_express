@@ -1,0 +1,64 @@
+const express = require ('express')
+const app = express()
+const port = 8080
+const basicAuth = require('express-basic-auth');
+
+
+
+
+
+app.get("", (req, res) => {
+   let song = ["Accidents will happen", "Adeste Fideles",
+   "All Alone", "Barbara", "The Bells of Christmas", "The Boys Night Out",
+    "Born Free", "Call me", "California", "Collegiate", "Cheek to Cheek",
+    "Close to You", "The Coffee Song", "Come Back to Me", "Crazy Love",
+    "The Continental", "Dear Heart", "Deep in a Cream", "Deep Night",
+    "Dindi"
+];
+
+function frank_song(array){
+    return array[Math.floor(Math.random() * array.length)];
+}
+res.send(frank_song(song));
+})
+
+app.get("/birth_date", (req, res) => {
+    res.send("December 12, 1915")
+})
+app.get("/birth_city", (req, res) => {
+    res.send("Hoboken, New Jersey")
+})
+app.get("/wives", (req, res) => {
+    res.send("Nancy Barbato, Ava Gardner, Mia Farrow, Barbara Marx")
+})
+app.get("/picture", (req, res) => {
+    res.redirect("https://en.wikipedia.org/wiki/Frank_Sinatra#/media/File:Frank_Sinatra2,_Pal_Joey.jpg")
+})
+app.get("/public", (req, res) => {
+    res.send("Everybody can see this page")
+
+})
+app.use(basicAuth({
+    users: { 'admin': 'admin' },
+    unauthorizedResponse: (req) => {
+        return "Not authorized"
+    }
+  }))
+app.use(basicAuth({
+    users: { 'admin': 'admin' },
+    challenge: true,
+    realm: 'foo',
+  }))
+app.get("/protected", (req, res) => {
+    res.send('Welcome, authenticated client');
+})
+
+
+
+//app.set('views', './views')
+//app.set('view engine', 'ejs')
+
+
+
+
+app.listen(port, '0.0.0.0', () => console.info('Listening on port 8080'))
